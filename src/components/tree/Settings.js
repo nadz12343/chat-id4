@@ -19,7 +19,7 @@ export default function Settings({userID_, globalWs}){
         console.log(userData)
         const updatedUserData = {updatedUserData: userData}
 
-        const ws = new WebSocket('ws://localhost:5432')
+        const ws = new WebSocket('ws://localhost:6534')
         setWs(ws)
         ws.addEventListener('open', () => ws.send(JSON.stringify(updatedUserData))
         )
@@ -45,7 +45,7 @@ export default function Settings({userID_, globalWs}){
     
     useEffect(() => {
    
-        const ws = new WebSocket('ws://localhost:5432')
+        const ws = new WebSocket('ws://localhost:6534')
         setWs(ws)
 
         //send the user_id so that its contacts can then retrieved when initiating connection with websockets

@@ -14,7 +14,7 @@ export default function Chats({userID_, globalWs, swapChattingTo}) {
 
         
         // const ws = globalWs
-        const ws = new WebSocket('ws://localhost:5432')
+        const ws = new WebSocket('ws://localhost:6534')
         setWs(ws)
 
         function switchFocusedChat(ind){

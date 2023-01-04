@@ -2,7 +2,7 @@ const pool = require('./db')
 const express = require('express')
 const http = require('http');
 
-const PORT = 5432
+const PORT = 6534
 const app = express()
 
 

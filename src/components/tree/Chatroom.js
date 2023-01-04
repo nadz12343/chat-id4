@@ -35,7 +35,7 @@ export default function Chatroom({userID_, contact, globalWs, goBack}) {
       if (contact === null) {
         setMsgs("Select a chat group to start chatting")
         return}
-      const ws = new WebSocket('ws://localhost:5432')
+      const ws = new WebSocket('ws://localhost:6534')
 
       // const ws = globalWs
       setWs(ws)

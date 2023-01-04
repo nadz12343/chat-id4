@@ -11,7 +11,7 @@ export default function Section({userID_, globalWs, swapChattingTo}) {
 
         
         // const ws = globalWs
-        const ws = new WebSocket('ws://localhost:5432')
+        const ws = new WebSocket('ws://localhost:6534')
         setWs(ws)
 
         //send the user_id so that its contacts can then retrieved when initiating connection with websockets
