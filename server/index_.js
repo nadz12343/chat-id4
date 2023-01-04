@@ -8,10 +8,13 @@ const app = express()
 
 
 const WebSocket = require('ws');
+const { parse } = require('path');
+const { useEffect } = require('react');
 const server = http.createServer(app)
 const wss = new WebSocket.Server({server})
+let ar  = []
 
-
+let ids = [1, 2]
 
 //escapes all ' characters with '' so that it can be used in postgre DB
 function escapeApostrophes(string) {
@@ -135,41 +138,41 @@ wss.on('connection', ws => {
 
 app.use(express.json())
 
-//when a user is logged in, retrieve all their contacts
-app.get("/retreiveContactsOfUser/:u_id", async (req, res) => {
-    const u_id = req.params.u_id;
-    // const contacts = await pool.query(`SELECT * FROM users WHERE u_id = ${u_id}`)
-    const contacts = await pool.query(`select * from con inner join users on users.u_id = con.u_id2 where u_id1 = ${u_id};`)
-   // res.send({greeting:"hello"})
-   res.send(contacts['rows'])
-})
+// //when a user is logged in, retrieve all their contacts
+// app.get("/retreiveContactsOfUser/:u_id", async (req, res) => {
+//     const u_id = req.params.u_id;
+//     // const contacts = await pool.query(`SELECT * FROM users WHERE u_id = ${u_id}`)
+//     const contacts = await pool.query(`select * from con inner join users on users.u_id = con.u_id2 where u_id1 = ${u_id};`)
+//    // res.send({greeting:"hello"})
+//    res.send(contacts['rows'])
+// })
 
 
-//retrieve the chat of two different users
-app.get("/retrieveChatOf_pri_user_to_sec_user/:chat_id", async (req, res) => {
-    const chat_id = parseInt(req.params.chat_id);
-    const chat = await pool.query(`select * from msgs where chat_id = ${chat_id};`)
-    res.send(chat['rows'])
-})
+// //retrieve the chat of two different users
+// app.get("/retrieveChatOf_pri_user_to_sec_user/:chat_id", async (req, res) => {
+//     const chat_id = parseInt(req.params.chat_id);
+//     const chat = await pool.query(`select * from msgs where chat_id = ${chat_id};`)
+//     res.send(chat['rows'])
+// })
 
 
-app.get(`/retrieveSecondaryUser/:sec_user_id`, async (req, res) => {
-    const sec_user_id = parseInt(req.params.sec_user_id)
-    const sec_user = await pool.query(`select * from users where u_id = ${sec_user_id}`)
-    res.send(sec_user['rows'])
-})
+// app.get(`/retrieveSecondaryUser/:sec_user_id`, async (req, res) => {
+//     const sec_user_id = parseInt(req.params.sec_user_id)
+//     const sec_user = await pool.query(`select * from users where u_id = ${sec_user_id}`)
+//     res.send(sec_user['rows'])
+// })
 
-app.get('/retrieveChatUsing_pri_user_and_sec_user/:pri_user_id/:sec_user_id', async (req, res) => {
-    const pri_user_id = parseInt(req.params.pri_user_id);
-    const sec_user_id = parseInt(req.params.sec_user_id);
+// app.get('/retrieveChatUsing_pri_user_and_sec_user/:pri_user_id/:sec_user_id', async (req, res) => {
+//     const pri_user_id = parseInt(req.params.pri_user_id);
+//     const sec_user_id = parseInt(req.params.sec_user_id);
     
-    // const msgs = await pool.query(`select * from msgs where chat_id = (
-    //     select chat_id from con where u_id1= ${pri_user_id} and u_id2 = ${sec_user_id})`)
+//     // const msgs = await pool.query(`select * from msgs where chat_id = (
+//     //     select chat_id from con where u_id1= ${pri_user_id} and u_id2 = ${sec_user_id})`)
 
-    const chat = await pool.query(`select * from chats where id = user_id= ${pri_user_id} and contact_id = ${sec_user_id}`)
-    // console.log(chat)
-    res.send(chat['rows'])
-})
+//     const chat = await pool.query(`select * from chats where id = user_id= ${pri_user_id} and contact_id = ${sec_user_id}`)
+//     // console.log(chat)
+//     res.send(chat['rows'])
+// })
 
 //UPGRADE FROM HTTP 1 TO WEBSOCKETS
 app.on('upgrade', (request, socket, head) => {
