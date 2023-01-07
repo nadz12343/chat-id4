@@ -10,6 +10,8 @@ import Settings from "./Settings"
 import {Link, Route, Navigate, Routes} from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
+import { createClient } from '@supabase/supabase-js'
+
 export default function Account() {
 
 
@@ -17,16 +19,20 @@ export default function Account() {
 
     const [chattingToContact, setchattingToContact] = useState(null)
 
-    const userID_ = 1
+    const userID_ = 4
 
     const [chosenSection, setChosenSection] = useState(<Chats userID_={userID_} swapChattingTo = {swapChattingTo} globalWs = {ws}/>)
 
-
+    const supabaseUrl = 'https://iqwckccxsmjgjfocdbqq.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxd2NrY2N4c21qZ2pmb2NkYnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzI3OTk1MDMsImV4cCI6MTk4ODM3NTUwM30.DqNEQWjTuH2g8IvBwvzCoGf0buYUV3Tlq9NUBkT3CtM'
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     function swapChattingTo(newchattingToContact){
         setchattingToContact(newchattingToContact)
     }
 
+
+    const channel = supabase.channel('1 4 4 1')
     //Section should be a general section component, more specialised ones are Chats, Contacts, and Settings
     //Chats and Contacts both display the contacts, but chats takes you the chatroom, and Contacts allows you view the contacts' profile
 
@@ -35,6 +41,15 @@ export default function Account() {
     //Setting only takes in ws and userID_
 
     //Section then takes in the props ws and userID_
+
+
+    useEffect( async () => {
+
+    // let data= await supabase
+    // .from('users').select("*").eq('id', 1)
+    // console.log(data)
+
+    }, [])
 
     return (
 
