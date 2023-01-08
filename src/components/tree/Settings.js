@@ -3,11 +3,16 @@ import { useEffect, useState } from "react"
 import Section from "./Section"
 
 import {IoIosArrowUp, IoIosArrowDown} from 'react-icons/io'
+import { createClient } from '@supabase/supabase-js'
+
 export default function Settings({userID_, globalWs}){
 
+    const supabaseUrl = 'https://iqwckccxsmjgjfocdbqq.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlxd2NrY2N4c21qZ2pmb2NkYnFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzI3OTk1MDMsImV4cCI6MTk4ODM3NTUwM30.DqNEQWjTuH2g8IvBwvzCoGf0buYUV3Tlq9NUBkT3CtM'
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const [userProfile ,setUserProfile] = useState()
-    const [userData, setUserData] = useState({})
+    const [userProfile ,setUserProfile] = useState() //  displays userData onto the input form
+    const [userData, setUserData] = useState({}) //used for the controlled inputs,
     const [ws, setWs] = useState()
 
     const [editMode, setEditMode] = useState(false)
@@ -15,14 +20,8 @@ export default function Settings({userID_, globalWs}){
     const [activeAccordians, setActiveAccordians] = useState({personalInfo: false, theme: false})
 
     //when button clicked, user info update is sent to the server and saved to DB
-    function updateDetails() {
-        console.log(userData)
-        const updatedUserData = {updatedUserData: userData}
-
-        const ws = new WebSocket('ws://localhost:6534')
-        setWs(ws)
-        ws.addEventListener('open', () => ws.send(JSON.stringify(updatedUserData))
-        )
+    async function updateDetails() {
+        const { data, error } = await supabase.from('users').update([{firstname:userData.firstname, surname:userData.surname, email:userData.email}]).eq('id', userID_)
     }
 
     function alterAccordians(){
@@ -44,29 +43,25 @@ export default function Settings({userID_, globalWs}){
     }
     
     useEffect(() => {
-   
-        const ws = new WebSocket('ws://localhost:6534')
-        setWs(ws)
 
-        //send the user_id so that its contacts can then retrieved when initiating connection with websockets
-        ws.addEventListener('open', () => ws.send(JSON.stringify({only_user_id: userID_})))
+        //gets the user details: name, email and id
 
-        //wait for the contacts info from the server
-        ws.addEventListener('message', resData => {
-            const objFromServer = JSON.parse(resData.data) //returns array with objects as elements
-            const userProfile = objFromServer.map((info, index) => {
-            return (
-                <div className="w-full p-32 mb-32 cursor-pointer bg-inputBg" key = {index}>
-                    <p>{info.name}</p>
-                    <p>{info.email}</p>
-                    <p>{info.id}</p>
-                </div>
+        async function getUserInfos(){
+            let { data: user, error } = await supabase.from('users').select('*').eq('id', userID_)
+            const userProfile = user.map((info, index) => {
+                return (
+                    <div className="w-full p-32 mb-32 cursor-pointer bg-inputBg" key = {index}>
+                        <p>{info.name}</p>
+                        <p>{info.email}</p>
+                        <p>{info.id}</p>
+                    </div>
                 )
-            })
-            setUserData(objFromServer[0])
-            setUserProfile(userProfile)
-
         })
+            setUserData(user[0])
+            setUserProfile(userProfile)
+        }
+
+        getUserInfos()
     }, [])
 
 

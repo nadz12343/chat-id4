@@ -10,9 +10,6 @@ import { BrowserRouter } from 'react-router-dom';
 export default function App() {
 
   return (
-    // <Login/>
-    <BrowserRouter>
-      <Account/>
-    </BrowserRouter>
+    <Login/>
   )
 }

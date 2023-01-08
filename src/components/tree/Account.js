@@ -12,14 +12,14 @@ import { useMediaQuery } from 'react-responsive';
 
 import { createClient } from '@supabase/supabase-js'
 
-export default function Account() {
+export default function Account(userID__, setIsLoggedIn) {
 
 
     const [ws, setWs] = useState(null)
 
     const [chattingToContact, setchattingToContact] = useState(null)
 
-    const userID_ = 4
+    const userID_ = parseInt(localStorage.getItem('loggedIn'))
 
     const [chosenSection, setChosenSection] = useState(<Chats userID_={userID_} swapChattingTo = {swapChattingTo} globalWs = {ws}/>)
 
@@ -31,8 +31,6 @@ export default function Account() {
         setchattingToContact(newchattingToContact)
     }
 
-
-    const channel = supabase.channel('1 4 4 1')
     //Section should be a general section component, more specialised ones are Chats, Contacts, and Settings
     //Chats and Contacts both display the contacts, but chats takes you the chatroom, and Contacts allows you view the contacts' profile
 
@@ -42,18 +40,7 @@ export default function Account() {
 
     //Section then takes in the props ws and userID_
 
-
-    useEffect( async () => {
-
-    // let data= await supabase
-    // .from('users').select("*").eq('id', 1)
-    // console.log(data)
-
-    }, [])
-
     return (
-
-
 
         <div className="h-[100vh] grid grid-rows-[90%_auto] grid-cols-1 lg:grid-rows-1 lg:grid-cols-[auto_30%_65%] w-[100vw]">
 
@@ -66,6 +53,7 @@ export default function Account() {
             <Nav changeToChatsSection = {() => setChosenSection(<Chats userID_={userID_} swapChattingTo = {swapChattingTo} globalWs = {ws}/>)}
                  changeToContactsSection = {() => setChosenSection(<Contacts userID_ = {userID_} globalWs = {ws}/>)}
                  changeToSettingsSection = {() => setChosenSection(<Settings userID_ = {userID_} globalWs = {ws}/>)}
+                 setIsLoggedIn = {setIsLoggedIn}
             /> 
              {/*This nav will be on the far left when lg bp is reached, otherwise at the bottom as the div ontop is block */}
             <div className="hidden w-full h-full lg:block"> {chosenSection} </div>
