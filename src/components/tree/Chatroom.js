@@ -6,8 +6,8 @@ import { HiDotsHorizontal } from "react-icons/hi";
 
 import {AiOutlineSend} from 'react-icons/ai'
 import {MdOutlineKeyboardArrowLeft} from 'react-icons/md'
-import {BiPhoneCall} from 'react-icons/bi'
-
+import {BiPhoneCall, BiSearch, BiVideo, BiInfoCircle} from 'react-icons/bi'
+import {BsEmojiSmile} from 'react-icons/bs'
 import { createClient } from '@supabase/supabase-js'
 
 
@@ -19,7 +19,7 @@ export default function Chatroom({userID_, contact, globalWs, goBack}) {
 
     const ref = useRef(null)
 
-
+console.log(contact)
     const [msgs, setMsgs] = useState("Select a contact to start chatting")
 
     const [userTyped, setUserTyped] = useState('')
@@ -100,14 +100,28 @@ export default function Chatroom({userID_, contact, globalWs, goBack}) {
   
       {/* SIMIILAR TO A HEADER */}
       <div className='flex items-center w-full p-16 text-white bg-inputBg border-b-2 border-b-white/[.05]'>
-        <button className='mr-24 rounded-md lg:p-16 w-fit h-fit bg-inputBg lg:hidden' onClick={goBack}>
+        <button className='mr-16 rounded-md lg:mr-24 lg:p-16 w-fit h-fit bg-inputBg hover:bg-primary/[.6] lg:hidden' onClick={goBack}>
           <MdOutlineKeyboardArrowLeft className='w-24 h-24'/>
         </button>
 
-        <h4 className='text-white text-h4s lg:text-h4 lg:ml-16'>{contacteeName} </h4>
+        <h4 className='text-white text-h4s lg:text-h4 lg:ml-16'>
+         {contact !== null && <img src = {`/avatars/${contact.profile_img}`} className='inline-block w-24 h-24 mr-16 lg:w-40 lg:h-40 lg:mr-24'/>}
+          {contacteeName}
+        </h4>
 
-        <button className='ml-auto rounded-md lg:p-16 w-fit h-fit bg-inputBg'>
-          <BiPhoneCall className='w-24 h-24'/>
+        <button className='flex ml-auto mr-8 rounded-md lg:p-16 w-fit h-fit bg-inputBg'>
+          <BiSearch className='w-16 h-16 lg:w-24 lg:h-24'/>
+        </button>
+        <button className='mr-8 rounded-md lg:p-16 w-fit h-fit bg-inputBg'>
+          <BiPhoneCall className='lg:w-24 lg:h-24'/>
+        </button>
+
+        <button className='mr-8 rounded-md lg:p-16 w-fit h-fit bg-inputBg'>
+          <BiVideo className='w-16 h-16 lg:w-24 lg:h-24'/>
+        </button>
+
+        <button className='rounded-md lg:p-16 w-fit h-fit bg-inputBg'>
+          <BiInfoCircle className='w-16 h-16 lg:w-24 lg:h-24'/>
         </button>
       </div>
 
@@ -121,10 +135,11 @@ export default function Chatroom({userID_, contact, globalWs, goBack}) {
         {/* user enters their message here */}
       <div className='flex items-center w-full h-full p-16 bg-inputBg border-t-2 border-t-white/[.05]'>
 
-        <button className='flex items-center justify-center h-full py-16 mr-16 text-white rounded-md w-fit bg-inptBg hover:bg-primary' onClick={submitUserTypedMsg}><HiDotsHorizontal className='w-32 h-32'/></button>
+        <button className='flex items-center justify-center h-full lg:px-8 lg:py-16 mr-16 text-white rounded-md w-fit bg-inptBg hover:bg-primary/[.6]' ><HiDotsHorizontal className='w-16 h-16 lg:w-32 lg:h-32'/></button>
+        <button className='flex items-center justify-center h-full lg:px-8 lg:py-16 lg:mr-16 text-white rounded-md w-fit bg-inptBg hover:bg-primary/[.6]' ><BsEmojiSmile className='w-16 h-16 lg:w-24 lg:h-24'/></button>
 
-        <input className='w-full h-48 p-16 text-white rounded-md bg-inputMsg' value = {userTyped} id = "userTextInp" onChange={(e) => setUserTyped(e.target.value)}/>
-        <button className=' flex items-center justify-center h-full py-16 px-8 ml-16 text-white rounded-md w-fit bg-primary/[.4] hover:bg-primary' onClick={submitUserTypedMsg}><AiOutlineSend className='w-32 h-32'/></button>
+        <input className='w-full h-[70%] p-16 text-white rounded-md bg-inputMsg' value = {userTyped} id = "userTextInp" onChange={(e) => setUserTyped(e.target.value)}/>
+        <button className=' flex items-center justify-center h-full py-16 px-8 ml-16 text-white rounded-md w-fit bg-primary/[.4] hover:bg-primary/[.6]' onClick={submitUserTypedMsg}><AiOutlineSend className='lg:w-32 lg:h-32'/></button>
       </div>
       </div>
     )
